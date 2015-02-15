@@ -17,29 +17,36 @@ public class FtpRequest implements Runnable{
 	private BufferedReader buffread;
 	private String user;
 	
+	/**
+	 * Constructeur
+	 * @param client : la socket concernée
+	 */
 	public FtpRequest(Socket client) {
 		this.sock = client;
-	}
-
-	
-	@Override
-	public void run() {
-		System.out.println("Thread run FtpRequest");
+		
 		try {
 			buffwrit = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 			buffread = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-			
-			EcrireMessage("220", "Connexion établie");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		
+	}
+
+	
+	/**
+	 * lance le processRequest. 
+	 */
+	public void run() {
+		EcrireMessage("220", "Connexion établie");
+		EcrireLog("Connexion établie");
 		processRequest();
 	}
 
 
-	//effectuant des traitements généraux concernant une 
-	//requête entrante et déléguant le traitement des commandes.
+	/**
+	 * boucle sur la socket ouverte pour lire la ligne et executer les commandes.
+	 */
 	public void processRequest(){
 		
 		while(!sock.isClosed()){
@@ -55,7 +62,9 @@ public class FtpRequest implements Runnable{
 		
 	}
 	
-	
+	/**
+	 * ferme la socket
+	 */
 	public void fermeConnexion(){
 		try {
 			buffwrit.close();
@@ -66,10 +75,18 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
+	/**
+	 * défini la variable user
+	 * @param utilisateur : le nom de l'utilisateur
+	 */
 	public void CreeUser(String utilisateur){
 		this.user = utilisateur;
 	}
 	
+	/**
+	 * appel readLine() du bufferedReader
+	 * @return la ligne
+	 */
 	public String LireLigne(){
 		try {
 			return this.buffread.readLine();
@@ -80,6 +97,11 @@ public class FtpRequest implements Runnable{
 		return null;
 	}
 	
+	/**
+	 * Ecrit sur la socket le message précédé du code
+	 * @param code : le code reponse en premier
+	 * @param message : le message
+	 */
 	public void EcrireMessage(String code, String message){
 		try {
 			buffwrit.write(code+" "+message+"\r\n");
@@ -90,6 +112,10 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
+	/**
+	 * Ecrit sur le log (ici le s.o.p) le messsage précédé du nom d'utilisateur
+	 * @param message : message à ecrire
+	 */
 	public void EcrireLog(String message){
 		System.out.println("["+this.user+"] "+message);
 	}
