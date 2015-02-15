@@ -1,6 +1,7 @@
 package commandes;
 
 import serveur.FtpRequest;
+import serveur.User;
 
 public class CommandeUser extends Commande {
 	
@@ -9,9 +10,10 @@ public class CommandeUser extends Commande {
 	}
 
 	public void lance() {
-		String user = laLigne.substring(5);
-		this.laRequete.CreeUser(user);
-		this.laRequete.EcrireMessage("331", "Nom correct");
-		this.laRequete.EcrireLog("Identification");
+		String username = laLigne.substring(5);
+		String directory = "/dossier";
+		this.laRequete.definiUser(new User(username, directory));
+		this.laRequete.ecrireMessage("331", "Nom correct");
+		this.laRequete.ecrireLog("Identification");
 	}
 }

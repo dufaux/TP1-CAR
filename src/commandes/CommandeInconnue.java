@@ -11,7 +11,7 @@ public class CommandeInconnue extends Commande {
 
 	@Override
 	public void lance() {
-		this.laRequete.EcrireMessage("202"," Commande Non implementee");
-		this.laRequete.EcrireLog("Commande Non implementee");
+		this.laRequete.ecrireMessage("202"," Commande Non implementee"); //502 ou 202?
+		this.laRequete.ecrireLog("Commande Non implementee");
 	}
 }

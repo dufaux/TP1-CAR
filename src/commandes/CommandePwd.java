@@ -10,7 +10,9 @@ public class CommandePwd extends Commande {
 
 	@Override
 	public void lance() {
-
+		
+		this.laRequete.ecrireMessage("257","\""+this.laRequete.getDirectory()+"\"");
+		this.laRequete.ecrireLog("PWD "+this.laRequete.getDirectory());
 	}
 
 }

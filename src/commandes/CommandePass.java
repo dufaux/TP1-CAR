@@ -10,9 +10,9 @@ public class CommandePass extends Commande {
 
 	@Override
 	public void lance() {
-		String password = this.laLigne.substring(5);
-		this.laRequete.EcrireMessage("230", "Mot de passe OK");
-		this.laRequete.EcrireLog("Mot de passe OK");
+		//String password = this.laLigne.substring(5);
+		this.laRequete.ecrireMessage("230", "Mot de passe OK");
+		this.laRequete.ecrireLog("Mot de passe OK");
 	}
 
 }

@@ -9,7 +9,7 @@ public class Serveur {
 	public static void main(String[] args) {
 		ServerSocket srv = null;
 		Socket client = null;
-		
+
 		try {
 			srv = new ServerSocket(2121);
 			System.out.println("Serveur lancé sur le port 2121");

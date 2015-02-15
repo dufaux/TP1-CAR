@@ -7,22 +7,16 @@ AIDE:
 http://fr.wikipedia.org/wiki/Liste_des_codes_des_r%C3%A9ponses_d%27un_serveur_FTP
 http://en.wikipedia.org/wiki/List_of_FTP_server_return_codes
 http://www.serv-u.com/respcode.asp?cmd=PASS&prod=su
+http://www.faqs.org/rfcs/rfc959.html
 
 
-PEUT-ETRE:
-Faire une classe d'interaction: "Connexion?"
-(lecture et ecrire sur la socket?)
-pk: => on injecte ça au FtpRequest, et on peut la mocker facilement.
-modif à apporter:
-la socket devrait être dans cette classe "Connexion",
-la classe "connexion" serait dans le ftp.
--que transmet-on aux commandes, la "connexion" ou tjrs le ftprequest?
- si le ftprequest, on conserve les fonction Ecrire/Lire? 
+OK USER, PASS, SYST.
+AJOUT DE CDUP, CWD, EPRT.
 
+manque retr, stor, (quit), pasv (difference eprt?).
 
-TODO:
-Systeme de user/pass? (fichier csv?)
-
+manque donc les transfert de fichiers.
+peut-être un systeme de login (fichier csv ac nom/mdp?)
 
 
 PERSO:

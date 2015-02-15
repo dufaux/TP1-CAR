@@ -3,9 +3,12 @@ package serveur;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import commandes.Commande;
 import commandes.CommandeFactory;
@@ -15,8 +18,11 @@ public class FtpRequest implements Runnable{
 	private Socket sock;
 	private BufferedWriter buffwrit;
 	private BufferedReader buffread;
-	private String user;
+	private User theUser;
 	
+	private Socket datasock;
+	private OutputStream dataOutputStream;
+	private InputStream dataInputStream;
 	/**
 	 * Constructeur
 	 * @param client : la socket concernée
@@ -38,8 +44,8 @@ public class FtpRequest implements Runnable{
 	 * lance le processRequest. 
 	 */
 	public void run() {
-		EcrireMessage("220", "Connexion établie");
-		EcrireLog("Connexion établie");
+		ecrireMessage("220", "Connexion établie");
+		ecrireLog("Connexion établie");
 		processRequest();
 	}
 
@@ -51,7 +57,7 @@ public class FtpRequest implements Runnable{
 		
 		while(!sock.isClosed()){
 			
-			String ligneCommande = LireLigne();
+			String ligneCommande = lireLigne();
 			
 			if(ligneCommande != null){
 				//this.EcrireLog("Commande : "+ligneCommande);
@@ -69,7 +75,7 @@ public class FtpRequest implements Runnable{
 		try {
 			buffwrit.close();
 			sock.close();
-			EcrireLog("Socket client fermé");
+			ecrireLog("Socket client fermé");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,15 +85,36 @@ public class FtpRequest implements Runnable{
 	 * défini la variable user
 	 * @param utilisateur : le nom de l'utilisateur
 	 */
-	public void CreeUser(String utilisateur){
-		this.user = utilisateur;
+	public void definiUser(User user){
+		this.theUser = user;
+	}
+	
+	/**
+	 * met authentifié de l'utilisateur a true
+	 */
+	public void authentifieUser(){
+		if(this.theUser != null){
+			this.theUser.authentifie();
+		}
+	}
+	
+	/**
+	 * retourne le repertoir de l'utilisateur
+	 * @return the directory
+	 */
+	public String getDirectory(){
+		return this.theUser.getDirectory();
+	}
+	
+	public void setDirectory(String dir){
+		this.theUser.setDirectory(dir);
 	}
 	
 	/**
 	 * appel readLine() du bufferedReader
 	 * @return la ligne
 	 */
-	public String LireLigne(){
+	public String lireLigne(){
 		try {
 			return this.buffread.readLine();
 		} catch (IOException e) {
@@ -102,7 +129,7 @@ public class FtpRequest implements Runnable{
 	 * @param code : le code reponse en premier
 	 * @param message : le message
 	 */
-	public void EcrireMessage(String code, String message){
+	public void ecrireMessage(String code, String message){
 		try {
 			buffwrit.write(code+" "+message+"\r\n");
 			buffwrit.flush();
@@ -112,11 +139,52 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
+	
+	
+	public void ouvreDataSocket(int port, String adresse){
+		try {
+			this.datasock = new Socket(adresse, port);
+			this.dataInputStream = datasock.getInputStream();
+			this.dataOutputStream = datasock.getOutputStream();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void fermeDataSocket(){
+			try {
+				this.dataInputStream.close();
+				this.dataOutputStream.close();
+				this.datasock.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	
+	public void ecrireData(byte[] donnees){
+		try {
+			this.dataOutputStream.write(donnees);
+			this.dataOutputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * Ecrit sur le log (ici le s.o.p) le messsage précédé du nom d'utilisateur
 	 * @param message : message à ecrire
 	 */
-	public void EcrireLog(String message){
-		System.out.println("["+this.user+"] "+message);
+	public void ecrireLog(String message){
+		String nom = null;
+		if(this.theUser != null){
+			nom = this.theUser.getName();
+		}
+		System.out.println("["+nom+"] "+message);
 	}
 }
