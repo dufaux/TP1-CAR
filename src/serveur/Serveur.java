@@ -1,13 +1,10 @@
-import java.io.BufferedWriter;
+package serveur;
+
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class Serveur {
-	
 	
 	public static void main(String[] args) {
 		ServerSocket srv = null;
@@ -16,6 +13,8 @@ public class Serveur {
 		try {
 			srv = new ServerSocket(2121);
 			System.out.println("Serveur lancé sur le port 2121");
+			//srv = new ServerSocket(Integer.parseInt(args[1]));
+			//System.out.println("Serveur lancé sur le port "+args[1]);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
