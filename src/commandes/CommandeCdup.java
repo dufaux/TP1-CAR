@@ -10,11 +10,10 @@ public class CommandeCdup extends Commande{
 
 	@Override
 	public void lance() {
-		//"/dossier/okidoki/blabla"
 		String curdir = this.laRequete.getDirectory();
 		String newdir = curdir.substring(0,curdir.lastIndexOf("/"));
 		this.laRequete.setDirectory(newdir);
-		this.laRequete.ecrireMessage("250","repertoire correctement changé");
+		this.laRequete.ecrireMessage("250","repertoire correctement changé == "+this.laRequete.getDirectory());
 		this.laRequete.ecrireLog("CWD "+this.laRequete.getDirectory());	
 	}
 

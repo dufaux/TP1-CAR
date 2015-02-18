@@ -36,7 +36,7 @@ public class CommandeList extends Commande {
 		    
 		    
 			this.laRequete.ecrireLog("Liste demandé : "+cmdunix);
-			this.laRequete.ecrireMessage("150", "Liste en cours");
+			this.laRequete.ecrireMessage("150", "Liste en cours "+this.laRequete.getDirectory());
 			this.laRequete.ecrireData(liste.getBytes(Charset.forName("UTF-8")));
 			this.laRequete.ecrireMessage("226", "Liste envoyée");
 			this.laRequete.fermeDataSocket();
@@ -45,7 +45,6 @@ public class CommandeList extends Commande {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

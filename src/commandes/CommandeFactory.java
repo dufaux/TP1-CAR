@@ -16,6 +16,8 @@ public class CommandeFactory {
 			return new CommandeCdup(requete, ligne);
 		}else if(commande.compareTo("CWD") == 0){
 			return new CommandeCwd(requete, ligne);
+		}else if(commande.compareTo("DELE") == 0){
+			return new CommandeDele(requete, ligne);
 		}else if(commande.compareTo("EPRT") == 0){
 			return new CommandeEprt(requete, ligne);
 		}else if(commande.compareTo("PASS") == 0){

@@ -1,5 +1,6 @@
 package serveur;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import commandes.Commande;
@@ -173,7 +175,26 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
-	
+	public byte[] lireFichier(BufferedOutputStream bos){
+		
+		int count;
+		byte[] fileInByte = new byte[1024];
+		try {
+			int Buffsize = this.datasock.getReceiveBufferSize();
+			while ((count = this.dataInputStream.read(fileInByte)) > 0) {
+		        bos.write(fileInByte, 0, count);
+		    }
+
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return fileInByte;
+		
+	}
 	
 	
 	/**
