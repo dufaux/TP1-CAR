@@ -5,12 +5,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import commandes.Commande;
 import commandes.CommandeFactory;
@@ -18,32 +15,30 @@ import commandes.CommandeFactory;
 public class FtpRequest implements Runnable{
 
 	private Socket sock;
+	private GestionnaireFichier gestionnaire;
+	private User theUser;
+	
 	private BufferedWriter buffwrit;
 	private BufferedReader buffread;
-	private User theUser;
 	
 	private Socket datasock;
 	private OutputStream dataOutputStream;
 	private InputStream dataInputStream;
 	/**
-	 * Constructeur
-	 * @param client : la socket concernée
+	 * Constructor
+	 * @param client : the socket used
 	 */
-	public FtpRequest(Socket client) {
+	public FtpRequest(Socket client, GestionnaireFichier gest, BufferedWriter bw, BufferedReader br) {
 		this.sock = client;
-		
-		try {
-			buffwrit = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
-			buffread = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
+		this.gestionnaire = gest;
+
+		this.buffwrit = bw;
+		this.buffread = br;
 	}
 
 	
 	/**
-	 * lance le processRequest. 
+	 * run the processRequest. 
 	 */
 	public void run() {
 		ecrireMessage("220", "Connexion établie");
@@ -53,7 +48,7 @@ public class FtpRequest implements Runnable{
 
 
 	/**
-	 * boucle sur la socket ouverte pour lire la ligne et executer les commandes.
+	 * read incoming command while the socket is open.
 	 */
 	public void processRequest(){
 		
@@ -63,36 +58,36 @@ public class FtpRequest implements Runnable{
 			
 			if(ligneCommande != null){
 				//this.EcrireLog("Commande : "+ligneCommande);
-				Commande laCommande = CommandeFactory.CreeUneCommande(this, ligneCommande);
+				Commande laCommande = CommandeFactory.CreeUneCommande(this, this.gestionnaire, ligneCommande);
 				laCommande.lance();
 			}
 		}
 		
+		ecrireLog("Socket client fermé");
 	}
 	
 	/**
-	 * ferme la socket
+	 * close the socket
 	 */
 	public void fermeConnexion(){
 		try {
 			buffwrit.close();
 			sock.close();
-			ecrireLog("Socket client fermé");
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
-	 * défini la variable user
-	 * @param utilisateur : le nom de l'utilisateur
+	 * set user variable
+	 * @param user : the objet user
 	 */
 	public void definiUser(User user){
 		this.theUser = user;
 	}
 	
 	/**
-	 * met authentifié de l'utilisateur a true
+	 * set authentifie with true.
 	 */
 	public void authentifieUser(){
 		if(this.theUser != null){
@@ -100,85 +95,39 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
-	/**
-	 * retourne le repertoir de l'utilisateur
-	 * @return the directory
-	 */
-	public String getDirectory(){
-		return this.theUser.getDirectory();
-	}
-	
-	public void setDirectory(String dir){
-		this.theUser.setDirectory(dir);
-	}
-	
-	public String lireListeDirectory(){
-		String liste = null;
-		String cmdunix = "ls -n ."+this.getDirectory();
-		Process p;
-		
-		try {
-			p = Runtime.getRuntime().exec(cmdunix);
-		    p.waitFor();
-			 
-		    BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		 
-		    liste = "";
-		    String line = "";
-		    while ((line = reader.readLine())!= null) {
-		    	liste+=line+" \r\n";
-		    }
-		    
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	    
-	    return liste;
-	}
 	
 	
 	/**
-	 * appel readLine() du bufferedReader
-	 * @return la ligne
+	 * call readLine() from the bufferedReader
+	 * @return the new line read
 	 */
 	public String lireLigne(){
 		try {
 			return this.buffread.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 	
 	/**
-	 * Ecrit sur la socket le message précédé du code
-	 * @param code : le code reponse en premier
-	 * @param message : le message
+	 * write on the socket the message with the return code before.
+	 * @param code : code 
+	 * @param message : the text send
 	 */
 	public void ecrireMessage(String code, String message){
 		try {
 			buffwrit.write(code+" "+message+"\r\n");
 			buffwrit.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
 	
-	public void ouvreDataSocket(int port, String adresse){
-		try {
-			this.datasock = new Socket(adresse, port);
-			this.dataInputStream = datasock.getInputStream();
-			this.dataOutputStream = datasock.getOutputStream();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void ouvreDataSocket(int port, String adresse) throws IOException{
+		this.datasock = new Socket(adresse, port);
+		this.dataInputStream = datasock.getInputStream();
+		this.dataOutputStream = datasock.getOutputStream();
 	}
 	
 	public void fermeDataSocket(){
@@ -187,7 +136,7 @@ public class FtpRequest implements Runnable{
 				this.dataOutputStream.close();
 				this.datasock.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 	}
 	
@@ -197,31 +146,29 @@ public class FtpRequest implements Runnable{
 			this.dataOutputStream.write(donnees);
 			this.dataOutputStream.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
-	public byte[] lireFichierData(BufferedOutputStream bos){
+	
+	public byte[] lireData(BufferedOutputStream bos){
 		
 		int count;
 		byte[] fileInByte = new byte[1024];
 		try {
-			int Buffsize = this.datasock.getReceiveBufferSize();
 			while ((count = this.dataInputStream.read(fileInByte)) > 0) {
 		        bos.write(fileInByte, 0, count);
 		    }
 
 		} catch (SocketException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		return fileInByte;
 		
 	}
-	
 	
 	/**
 	 * Ecrit sur le log (ici le s.o.p) le messsage précédé du nom d'utilisateur

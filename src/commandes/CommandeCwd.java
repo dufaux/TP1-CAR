@@ -1,11 +1,15 @@
 package commandes;
 
 import serveur.FtpRequest;
+import serveur.GestionnaireFichier;
 
 public class CommandeCwd extends Commande {
 
-	public CommandeCwd(FtpRequest requete, String ligne) {
+	private GestionnaireFichier gestionnaire;
+	
+	public CommandeCwd(FtpRequest requete, GestionnaireFichier gest, String ligne) {
 		super(requete, ligne);
+		this.gestionnaire = gest;
 	}
 
 	public void lance() {
@@ -15,12 +19,12 @@ public class CommandeCwd extends Commande {
 			newdir = dossier;
 		}
 		else{
-			newdir = this.laRequete.getDirectory()+"/"+dossier;
+			newdir = this.gestionnaire.getDirectory()+"/"+dossier;
 		}
 
-		this.laRequete.setDirectory(newdir);
+		this.gestionnaire.setDirectory(newdir);
 		this.laRequete.ecrireMessage("250","repertoire correctement changé");
-		this.laRequete.ecrireLog("CWD "+this.laRequete.getDirectory());	
+		this.laRequete.ecrireLog("CWD "+this.gestionnaire.getDirectory());	
 	}
 
 }

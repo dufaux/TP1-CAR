@@ -19,6 +19,7 @@ public abstract class Commande {
 	
 	/**
 	 * Execute la commande
+	 * @throws Exception 
 	 */
 	public abstract void lance();
 }

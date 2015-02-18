@@ -10,8 +10,8 @@ public class CommandeQuit extends Commande {
 
 	@Override
 	public void lance() {
-		this.laRequete.fermeConnexion();
 		this.laRequete.ecrireMessage("221"," Deconnexion");
+		this.laRequete.fermeConnexion();
 		this.laRequete.ecrireLog("Deconnexion");
 	}
 

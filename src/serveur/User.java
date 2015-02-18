@@ -3,12 +3,10 @@ package serveur;
 public class User {
 	
 	private String name;
-	private String directory;
 	private boolean authentification;
 	
-	public User(String theName, String theDirectory){
+	public User(String theName){
 		this.name = theName;
-		this.directory = theDirectory;
 		this.authentification = false;
 	}
 	
@@ -24,11 +22,4 @@ public class User {
 		return this.name;
 	}
 
-	public String getDirectory() {
-		return this.directory;
-	}
-	
-	public void setDirectory(String dir) {
-		this.directory = dir;
-	}
 }

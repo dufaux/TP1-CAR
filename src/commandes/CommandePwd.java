@@ -1,18 +1,22 @@
 package commandes;
 
 import serveur.FtpRequest;
+import serveur.GestionnaireFichier;
 
 public class CommandePwd extends Commande {
 
-	public CommandePwd(FtpRequest requete, String ligne) {
+	private GestionnaireFichier gestionnaire;
+	
+	public CommandePwd(FtpRequest requete, GestionnaireFichier gest, String ligne) {
 		super(requete, ligne);
+		this.gestionnaire = gest;
 	}
 
 	@Override
 	public void lance() {
 		
-		this.laRequete.ecrireMessage("257","\""+this.laRequete.getDirectory()+"\"");
-		this.laRequete.ecrireLog("PWD "+this.laRequete.getDirectory());
+		this.laRequete.ecrireMessage("257","\""+this.gestionnaire.getDirectory()+"\"");
+		this.laRequete.ecrireLog("PWD "+this.gestionnaire.getDirectory());
 	}
 
 }

@@ -3,17 +3,21 @@ package commandes;
 import java.io.File;
 
 import serveur.FtpRequest;
+import serveur.GestionnaireFichier;
 
 public class CommandeDele extends Commande {
 
-	public CommandeDele(FtpRequest requete, String ligne) {
+	private GestionnaireFichier gestionnaire;
+	
+	public CommandeDele(FtpRequest requete, GestionnaireFichier gest, String ligne) {
 		super(requete, ligne);
+		this.gestionnaire = gest;
 	}
 
 	@Override
 	public void lance() {
 		
-		String fileName = "."+this.laRequete.getDirectory()+"/"+laLigne.substring(5);
+		String fileName = "."+this.gestionnaire.getDirectory()+"/"+laLigne.substring(5);
 		File myFile = new File (fileName);
 		
 		if(myFile.delete()){

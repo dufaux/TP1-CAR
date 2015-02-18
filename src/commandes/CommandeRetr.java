@@ -1,37 +1,23 @@
 package commandes;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 import serveur.FtpRequest;
-import serveur.User;
+import serveur.GestionnaireFichier;
 
 public class CommandeRetr extends Commande {
 	
-	public CommandeRetr(FtpRequest requete, String ligne){
+	private GestionnaireFichier gestionnaire;
+	
+	public CommandeRetr(FtpRequest requete, GestionnaireFichier gest, String ligne){
 		super(requete, ligne);
+		this.gestionnaire = gest;
 	}
 
 	@Override
 	public void lance() {
 		
-		String fileName = "."+this.laRequete.getDirectory()+"/"+laLigne.substring(5);
+		String fileName = "."+this.gestionnaire.getDirectory()+"/"+laLigne.substring(5);
 		
-		File myFile = new File (fileName);
-		FileInputStream fis;
-		BufferedInputStream bis;
-        byte [] myByteArray  = new byte [(int)myFile.length()];
-        try {
-            fis = new FileInputStream(myFile);
-            bis = new BufferedInputStream(fis);
-			bis.read(myByteArray,0,myByteArray.length);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+        byte[] myByteArray = this.gestionnaire.LireFichierLocal(fileName);
 		
 		
 		this.laRequete.ecrireLog("Fichier demandé : "+fileName);

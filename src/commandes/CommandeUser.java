@@ -11,8 +11,7 @@ public class CommandeUser extends Commande {
 
 	public void lance() {
 		String username = laLigne.substring(5);
-		String directory = "/dossier";
-		this.laRequete.definiUser(new User(username, directory));
+		this.laRequete.definiUser(new User(username));
 		this.laRequete.ecrireMessage("331", "Nom correct");
 		this.laRequete.ecrireLog("Identification");
 	}

@@ -1,8 +1,42 @@
-Probleme réglé, en fait il attend un mesasge "serveur pret" = 220.
-Liste ici :
+Serveur FTP en java.
+Johan Dufaux & Julien Mallet
+18/02/2015
 
 
-AIDE:
+
+
+ Introduction
+=====================
+
+Ce "logiciel" permet de faire tourner un serveur en java. 
+
+
+
+ Architecture
+=====================
+
+package Commande:
+La liste des commandes executable par notre serveur.
+
+package serveur:
+Les classes "utiles" pour la gestion du serveur.
+
+tests:
+Les classes réalisant les tests unitaires.
+
+
+Gestion des exceptions:
+
+
+
+
+ Code Samples
+=====================
+
+
+
+
+
 
 http://fr.wikipedia.org/wiki/Liste_des_codes_des_r%C3%A9ponses_d%27un_serveur_FTP
 http://en.wikipedia.org/wiki/List_of_FTP_server_return_codes

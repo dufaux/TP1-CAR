@@ -1,11 +1,19 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import serveur.FtpRequest;
+import serveur.GestionnaireFichier;
 
 import commandes.Commande;
 import commandes.CommandeCdup;
@@ -15,28 +23,29 @@ import commandes.CommandeInconnue;
 import commandes.CommandeList;
 import commandes.CommandeQuit;
 import commandes.CommandeRetr;
-import serveur.FtpRequest;
-import static org.mockito.Mockito.*;
+import commandes.CommandeSyst;
 
 
 public class CommandeTest {
 	
 	private FtpRequest ftpreq;
+	private GestionnaireFichier gest;
 	
 	@Before
 	public void setUp(){
 		ftpreq = mock(FtpRequest.class);
+		gest = mock(GestionnaireFichier.class);
 	}
 	
 	@Test
 	public void testCdup() {
-		Commande cmd = new CommandeCdup(this.ftpreq, "CDUP");
+		Commande cmd = new CommandeCdup(this.ftpreq, gest, "CDUP");
 		String newdir = "/rep";
 		
-		when(this.ftpreq.getDirectory()).thenReturn("/rep/sousrep").thenReturn(newdir);
+		when(this.gest.getDirectory()).thenReturn("/rep/sousrep").thenReturn(newdir);
 		
 		cmd.lance();
-		verify(this.ftpreq).setDirectory(newdir);
+		verify(this.gest).setDirectory(newdir);
 		verify(this.ftpreq).ecrireMessage("250","repertoire correctement changé == "+newdir);
 		verify(this.ftpreq).ecrireLog("CDUP "+newdir);
 	}
@@ -44,20 +53,20 @@ public class CommandeTest {
 	
 	@Test
 	public void testCwd() {
-		Commande cmd = new CommandeCwd(this.ftpreq, "CWD petitrep");
+		Commande cmd = new CommandeCwd(this.ftpreq, gest, "CWD petitrep");
 		String newdir = "/rep/sousrep/petitrep";
 		
-		when(this.ftpreq.getDirectory()).thenReturn("/rep/sousrep").thenReturn("/rep/sousrep/petitrep");	
+		when(this.gest.getDirectory()).thenReturn("/rep/sousrep").thenReturn("/rep/sousrep/petitrep");	
 		
 		cmd.lance();
-		verify(this.ftpreq).setDirectory(newdir);
+		verify(this.gest).setDirectory(newdir);
 		verify(this.ftpreq).ecrireMessage("250","repertoire correctement changé");
 		verify(this.ftpreq).ecrireLog("CWD "+newdir);
 		
 	}
 	
 	@Test
-	public void testEprt() {
+	public void testEprt() throws UnknownHostException, IOException {
 		Commande cmd = new CommandeEprt(this.ftpreq, "EPRT |2|192.168.0.23|29340");
 
 		cmd.lance();
@@ -82,12 +91,12 @@ public class CommandeTest {
 		String descriptif = "repertoire1 ok xxxcc \r\n repertoire2 ok xxcd \r\n";
 		String dir = "/rep/sousrep";
 		
-		Commande cmd = new CommandeList(this.ftpreq, "LIST");
-		when(this.ftpreq.lireListeDirectory()).thenReturn(descriptif);
-		when(this.ftpreq.getDirectory()).thenReturn(dir);
+		Commande cmd = new CommandeList(this.ftpreq, gest, "LIST");
+		when(this.gest.lireListeDirectory()).thenReturn(descriptif);
+		when(this.gest.getDirectory()).thenReturn(dir);
 		
 		cmd.lance();
-		verify(this.ftpreq).lireListeDirectory();
+		verify(this.gest).lireListeDirectory();
 		verify(this.ftpreq).ecrireLog("Liste demandé : ");
 		verify(this.ftpreq).ecrireMessage("150", "Liste en cours "+dir);
 		verify(this.ftpreq).ecrireData(descriptif.getBytes(Charset.forName("UTF-8")));
@@ -125,14 +134,41 @@ public class CommandeTest {
 	
 	@Test
 	public void testRetr() {
-		Commande cmd = new CommandeRetr(this.ftpreq, "RETR fichier.txt");
+		String filename = "readme.txt";
+		
+		Commande cmd = new CommandeRetr(this.ftpreq, gest, "RETR "+filename);
+		String dir = "/rep/sousrep";
+		String fichier = "."+dir+"/"+filename;
+		byte[] contenu = "Voici un exemple de contenu de fichier. je prend du texte \r\n pour plus de facilité!".getBytes();
+		
+		when(this.gest.getDirectory()).thenReturn(dir);	
+		when(this.gest.LireFichierLocal(fichier)).thenReturn(contenu);
 		
 		cmd.lance();
 		
-		verify(this.ftpreq).fermeConnexion();
-		verify(this.ftpreq).ecrireMessage("221"," Deconnexion");
-		verify(this.ftpreq).ecrireLog("Deconnexion");
+		verify(this.ftpreq).ecrireLog("Fichier demandé : "+fichier);
+		verify(this.ftpreq).ecrireMessage("150", "Reception de "+fichier+" en cours");
+		verify(this.ftpreq).ecrireData(contenu);
+		verify(this.ftpreq).ecrireMessage("226", fichier+" envoyé");
+		verify(this.ftpreq).fermeDataSocket();
+		verify(this.ftpreq).ecrireLog(fichier+" envoyé : ");
 	}
 	
-
+	
+	@Test
+	public void testStor() {
+		//TO DO (methode enregistrerFichier?)
+		assertTrue(false);
+	}
+	
+	
+	@Test
+	public void testSyst() {
+		Commande cmd = new CommandeSyst(this.ftpreq, "SYST");
+		
+		cmd.lance();
+		
+		verify(this.ftpreq).ecrireMessage("215","UNIX Type: L8");
+		verify(this.ftpreq).ecrireLog("Syt UNIX Type: L8");
+	}
 }
