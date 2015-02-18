@@ -17,6 +17,7 @@ public class FtpRequest implements Runnable{
 	private Socket sock;
 	private GestionnaireFichier gestionnaire;
 	private User theUser;
+	private Authentification authentificator;
 	
 	private BufferedWriter buffwrit;
 	private BufferedReader buffread;
@@ -28,10 +29,10 @@ public class FtpRequest implements Runnable{
 	 * Constructor
 	 * @param client : the socket used
 	 */
-	public FtpRequest(Socket client, GestionnaireFichier gest, BufferedWriter bw, BufferedReader br) {
+	public FtpRequest(Socket client, GestionnaireFichier gest, Authentification auth, BufferedWriter bw, BufferedReader br) {
 		this.sock = client;
 		this.gestionnaire = gest;
-
+		this.authentificator = auth;
 		this.buffwrit = bw;
 		this.buffread = br;
 	}
@@ -58,7 +59,7 @@ public class FtpRequest implements Runnable{
 			
 			if(ligneCommande != null){
 				//this.EcrireLog("Commande : "+ligneCommande);
-				Commande laCommande = CommandeFactory.CreeUneCommande(this, this.gestionnaire, ligneCommande);
+				Commande laCommande = CommandeFactory.CreeUneCommande(this, this.gestionnaire, this.authentificator, ligneCommande);
 				laCommande.lance();
 			}
 		}
@@ -86,6 +87,10 @@ public class FtpRequest implements Runnable{
 		this.theUser = user;
 	}
 	
+	public User getUser(){
+		return this.theUser;
+	}
+
 	/**
 	 * set authentifie with true.
 	 */
@@ -123,13 +128,21 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
-	
+	/**
+	 * open a new socket used to send byte (for example list or file)
+	 * @param port : port of client
+	 * @param adresse : adress of client
+	 * @throws IOException
+	 */
 	public void ouvreDataSocket(int port, String adresse) throws IOException{
 		this.datasock = new Socket(adresse, port);
 		this.dataInputStream = datasock.getInputStream();
 		this.dataOutputStream = datasock.getOutputStream();
 	}
 	
+	/**
+	 * close the datasocket
+	 */
 	public void fermeDataSocket(){
 			try {
 				this.dataInputStream.close();
@@ -140,7 +153,10 @@ public class FtpRequest implements Runnable{
 			}
 	}
 	
-	
+	/**
+	 * write on datasocket
+	 * @param data writed on the socket
+	 */
 	public void ecrireData(byte[] donnees){
 		try {
 			this.dataOutputStream.write(donnees);
@@ -150,8 +166,11 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
-	
-	public byte[] lireData(BufferedOutputStream bos){
+	/**
+	 * read data on datasocket and write it on the bufferedoutputstream
+	 * @param bos : buffer where data are writted
+	 */
+	public void lireData(BufferedOutputStream bos){
 		
 		int count;
 		byte[] fileInByte = new byte[1024];
@@ -166,7 +185,6 @@ public class FtpRequest implements Runnable{
 			throw new RuntimeException(e);
 		}
 		
-		return fileInByte;
 		
 	}
 	

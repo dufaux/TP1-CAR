@@ -7,6 +7,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * 
+ *
+ */
 public class GestionnaireFichier {
 	
 	private String directory;
@@ -18,17 +22,23 @@ public class GestionnaireFichier {
 	}
 	
 	/**
-	 * retourne le repertoir de l'utilisateur
 	 * @return the directory
 	 */
 	public String getDirectory(){
 		return this.directory;
 	}
 	
+	/**
+	 * @param dir : set the directory
+	 */
 	public void setDirectory(String dir){
 		this.directory = dir;
 	}
 	
+	/**
+	 * execute "ls -n" on the current directory
+	 * @return the respons of the unix command as string.
+	 */
 	public String lireListeDirectory(){
 		String liste = null;
 		String cmdunix = "ls -n ."+this.getDirectory();
@@ -56,6 +66,11 @@ public class GestionnaireFichier {
 	}
 	
 	
+	/**
+	 * read local file and return it as byte array.
+	 * @param fileName the file pathname to read
+	 * @return the file in byte array.
+	 */
 	public byte[] LireFichierLocal(String fileName){
 		File myFile = new File (fileName);
 		FileInputStream fis;

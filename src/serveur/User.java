@@ -1,5 +1,8 @@
 package serveur;
 
+/**
+ * class just to know if user is allowed to download or not.
+ */
 public class User {
 	
 	private String name;

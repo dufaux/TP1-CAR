@@ -11,6 +11,7 @@ import java.net.Socket;
 import org.junit.Before;
 import org.junit.Test;
 
+import serveur.Authentification;
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
 
@@ -19,6 +20,7 @@ public class FtpRequestTest {
 	private FtpRequest ftpreq;
 	private Socket sock;
 	private GestionnaireFichier gest;
+	private Authentification auth;
 	private BufferedWriter bw;
 	private BufferedReader br;
 	
@@ -26,9 +28,10 @@ public class FtpRequestTest {
 	public void setUp(){
 		this.sock = mock(Socket.class);
 		this.gest = mock(GestionnaireFichier.class);
+		this.auth = mock(Authentification.class);
 		this.bw = mock(BufferedWriter.class);
 		this.br = mock(BufferedReader.class);
-		ftpreq = new FtpRequest(this.sock, this.gest, this.bw, this.br);
+		ftpreq = new FtpRequest(this.sock, this.gest, this.auth, this.bw, this.br);
 	}
 
 	

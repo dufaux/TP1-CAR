@@ -12,29 +12,34 @@ import java.nio.charset.Charset;
 import org.junit.Before;
 import org.junit.Test;
 
+import serveur.Authentification;
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
-
+import serveur.User;
 import commandes.Commande;
 import commandes.CommandeCdup;
 import commandes.CommandeCwd;
 import commandes.CommandeEprt;
 import commandes.CommandeInconnue;
 import commandes.CommandeList;
+import commandes.CommandePass;
 import commandes.CommandeQuit;
 import commandes.CommandeRetr;
 import commandes.CommandeSyst;
+import commandes.CommandeUser;
 
 
 public class CommandeTest {
 	
 	private FtpRequest ftpreq;
 	private GestionnaireFichier gest;
+	private Authentification auth;
 	
 	@Before
 	public void setUp(){
 		ftpreq = mock(FtpRequest.class);
 		gest = mock(GestionnaireFichier.class);
+		auth = mock(Authentification.class);
 	}
 	
 	@Test
@@ -109,14 +114,27 @@ public class CommandeTest {
 	
 	@Test
 	public void testPass() {
-		//TO DO
-		assertTrue(false);
+		String password = "tata";
+		String name = "toto";
+		Commande cmd = new CommandePass(this.ftpreq, auth, "PASS "+password);
+		User user = mock(User.class);
+		
+		when(user.getName()).thenReturn(name);
+		when(this.ftpreq.getUser()).thenReturn(user);
+
+		cmd.lance();
+		
+		verify(this.auth).passwordCorrect(name,password);
+		this.ftpreq.authentifieUser();
 	}
 	
 	@Test
 	public void testUser() {
-		//TO DO
-		assertTrue(false);
+		String username = "toto";
+		Commande cmd = new CommandeUser(this.ftpreq, auth, "USER "+username);
+		
+		cmd.lance();
+		verify(this.auth).exist(username);
 	}	
 	
 	
@@ -154,12 +172,6 @@ public class CommandeTest {
 		verify(this.ftpreq).ecrireLog(fichier+" envoyé : ");
 	}
 	
-	
-	@Test
-	public void testStor() {
-		//TO DO (methode enregistrerFichier?)
-		assertTrue(false);
-	}
 	
 	
 	@Test

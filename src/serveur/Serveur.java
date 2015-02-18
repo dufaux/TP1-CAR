@@ -32,8 +32,9 @@ public class Serveur {
 				
 				BufferedWriter buffwrit = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 				BufferedReader buffread = new BufferedReader(new InputStreamReader(client.getInputStream()));
+				Authentification auth = new Authentification("./users.txt");
 				
-				Thread th = new Thread(new FtpRequest(client, gest, buffwrit, buffread));
+				Thread th = new Thread(new FtpRequest(client, gest, auth, buffwrit, buffread));
 				th.start();
 			}
 			
