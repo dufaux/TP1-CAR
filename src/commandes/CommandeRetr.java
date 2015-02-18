@@ -23,22 +23,20 @@ public class CommandeRetr extends Commande {
 		File myFile = new File (fileName);
 		FileInputStream fis;
 		BufferedInputStream bis;
-        byte [] mybytearray  = new byte [(int)myFile.length()];
+        byte [] myByteArray  = new byte [(int)myFile.length()];
         try {
             fis = new FileInputStream(myFile);
             bis = new BufferedInputStream(fis);
-			bis.read(mybytearray,0,mybytearray.length);
+			bis.read(myByteArray,0,myByteArray.length);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        System.out.println("Sending " + fileName + "(" + mybytearray.length + " bytes)");
-        
 
 		
 		
 		this.laRequete.ecrireLog("Fichier demandé : "+fileName);
 		this.laRequete.ecrireMessage("150", "Reception de "+fileName+" en cours");
-        this.laRequete.ecrireData(mybytearray);
+        this.laRequete.ecrireData(myByteArray);
 		this.laRequete.ecrireMessage("226", fileName+" envoyé");
 		this.laRequete.fermeDataSocket();
 		this.laRequete.ecrireLog(fileName+" envoyé : ");

@@ -112,6 +112,33 @@ public class FtpRequest implements Runnable{
 		this.theUser.setDirectory(dir);
 	}
 	
+	public String lireListeDirectory(){
+		String liste = null;
+		String cmdunix = "ls -n ."+this.getDirectory();
+		Process p;
+		
+		try {
+			p = Runtime.getRuntime().exec(cmdunix);
+		    p.waitFor();
+			 
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		 
+		    liste = "";
+		    String line = "";
+		    while ((line = reader.readLine())!= null) {
+		    	liste+=line+" \r\n";
+		    }
+		    
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    return liste;
+	}
+	
+	
 	/**
 	 * appel readLine() du bufferedReader
 	 * @return la ligne
@@ -140,7 +167,6 @@ public class FtpRequest implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
 	
 	
 	public void ouvreDataSocket(int port, String adresse){
@@ -175,7 +201,7 @@ public class FtpRequest implements Runnable{
 		}
 	}
 	
-	public byte[] lireFichier(BufferedOutputStream bos){
+	public byte[] lireFichierData(BufferedOutputStream bos){
 		
 		int count;
 		byte[] fileInByte = new byte[1024];

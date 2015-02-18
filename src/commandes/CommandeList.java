@@ -16,37 +16,15 @@ public class CommandeList extends Commande {
 	@Override
 	public void lance() {
 		
-		Process p;
-		try {
-			
-			String cmdunix = "ls -n ."+this.laRequete.getDirectory();
-			//execute ls -n sur le dossier courrant.
-			p = Runtime.getRuntime().exec(cmdunix);
-			
-		    p.waitFor();
-			 
-		    BufferedReader reader = 
-		         new BufferedReader(new InputStreamReader(p.getInputStream()));
-		 
-		    String line = "";
-		    String liste = "";
-		    while ((line = reader.readLine())!= null) {
-		    	liste+=line+" \r\n";
-		    }
 		    
+		    String liste = this.laRequete.lireListeDirectory();
 		    
-			this.laRequete.ecrireLog("Liste demandé : "+cmdunix);
+			this.laRequete.ecrireLog("Liste demandé : ");
 			this.laRequete.ecrireMessage("150", "Liste en cours "+this.laRequete.getDirectory());
 			this.laRequete.ecrireData(liste.getBytes(Charset.forName("UTF-8")));
 			this.laRequete.ecrireMessage("226", "Liste envoyée");
 			this.laRequete.fermeDataSocket();
 			this.laRequete.ecrireLog("Liste envoyé : ");
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

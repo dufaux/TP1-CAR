@@ -26,7 +26,7 @@ public class CommandeStor extends Commande {
         try {
     		fos = new FileOutputStream(fileName);
     		bos = new BufferedOutputStream(fos);
-            this.laRequete.lireFichier(bos);
+            this.laRequete.lireFichierData(bos);
             bos.flush();
             bos.close();
             fos.close();
