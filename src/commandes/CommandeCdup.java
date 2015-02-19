@@ -2,7 +2,11 @@ package commandes;
 
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
-
+/**
+ * 
+ * @author julien
+ *
+ */
 public class CommandeCdup extends Commande{
 
 	private GestionnaireFichier gestionnaire;
@@ -19,7 +23,7 @@ public class CommandeCdup extends Commande{
 	}
 
 	/**
-	 * 
+	 * allow to verify if the directory is changed
 	 */
 	public void lance(){
 		String curdir = this.gestionnaire.getDirectory();

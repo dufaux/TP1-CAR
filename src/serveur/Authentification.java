@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-
+ /**
+  * authantificate a user for check if the user exist
+  * @author julien
+  *
+  */
 public class Authentification {
 	
 	private String namefile;

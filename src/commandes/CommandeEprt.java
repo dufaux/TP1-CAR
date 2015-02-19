@@ -6,11 +6,18 @@ import serveur.FtpRequest;
 
 public class CommandeEprt extends Commande{
 	
+	/**
+	 * constructor CommandeEprt
+	 * @param requete : tge requete received
+	 * @param ligne : the line received
+	 */
 	public CommandeEprt(FtpRequest requete, String ligne) {
 		super(requete, ligne);
 	}
 
-	@Override
+	/**
+	 * receive port and IP adress and open a dataSocketet
+	 */
 	public void lance() {
 		String[] params = this.laLigne.substring(5).split("\\|");
 		if(params.length != 4){

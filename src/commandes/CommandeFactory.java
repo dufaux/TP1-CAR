@@ -2,9 +2,21 @@ package commandes;
 import serveur.Authentification;
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
-
+/**
+ * display in the server the commands used 
+ * @author julien
+ *
+ */
 public class CommandeFactory {
 	
+	/**
+	 * execute a command based on a received message
+	 * @param requete : the requete received
+	 * @param gest : the gestionnaire
+	 * @param auth : the authentification
+	 * @param ligne : the line received
+	 * @return a commande used
+	 */
 	public static Commande CreeUneCommande(FtpRequest requete, GestionnaireFichier gest, Authentification auth, String ligne){
 
 		String message[] = ligne.split(" ", 2);

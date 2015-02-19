@@ -4,6 +4,12 @@ import serveur.Authentification;
 import serveur.FtpRequest;
 import serveur.User;
 
+/**
+ * this command, identify the user and check
+ * if this password is correct
+ * @author julien
+ *
+ */
 public class CommandePass extends Commande {
 	
 	private Authentification authentificator;

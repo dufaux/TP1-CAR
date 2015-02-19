@@ -4,6 +4,11 @@ import serveur.Authentification;
 import serveur.FtpRequest;
 import serveur.User;
 
+/**
+ * check if the user is exact
+ * @author julien
+ *
+ */
 public class CommandeUser extends Commande {
 	
 	private Authentification authentificator;

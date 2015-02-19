@@ -6,17 +6,30 @@ import java.io.IOException;
 
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
-
+/**
+ * deposite a file from the local directory to the remote directory
+ * @author julien
+ *
+ */
 public class CommandeStor extends Commande {
 	
 	private GestionnaireFichier gestionnaire;
 	
+	/**
+	 * constructor cmmandeStor
+	 * @param requete : the requete received
+	 * @param gest : the gestionnaire
+	 * @param ligne : the line received
+	 */
 	public CommandeStor(FtpRequest requete, GestionnaireFichier gest, String ligne){
 		super(requete, ligne);
 		this.gestionnaire = gest;
 	}
 
-	@Override
+	/**
+	 * allow to deposite a file
+	 * and received a message
+	 */
 	public void lance() {
 		
 		String fileName = "."+this.gestionnaire.getDirectory()+"/"+laLigne.substring(5);

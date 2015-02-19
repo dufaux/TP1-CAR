@@ -3,6 +3,11 @@ package commandes;
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
 
+/**
+ * display the path of current Directory
+ * @author julien
+ *
+ */
 public class CommandePwd extends Commande {
 
 	private GestionnaireFichier gestionnaire;

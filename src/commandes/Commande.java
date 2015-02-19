@@ -1,16 +1,20 @@
 package commandes;
 
 import serveur.FtpRequest;
-
+/**
+ * allow to execut the command
+ * @author julien
+ *
+ */
 public abstract class Commande {
 
 	protected FtpRequest laRequete;
 	protected String laLigne;
 
 	/**
-	 * Constructeur de Commande
-	 * @param requete : la FtpRequest lié à la commande
-	 * @param ligne : la ligne de message reçue par le client
+	 * Constructor de Commande
+	 * @param requete : the FtpRequest linked at the command
+	 * @param ligne : the message line received by the client
 	 */
 	public Commande(FtpRequest requete, String ligne){
 		this.laRequete = requete;
@@ -18,7 +22,7 @@ public abstract class Commande {
 	}
 	
 	/**
-	 * Execute la commande
+	 * Execut the command
 	 * @throws Exception 
 	 */
 	public abstract void lance();

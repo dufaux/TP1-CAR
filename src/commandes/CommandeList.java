@@ -5,6 +5,11 @@ import java.nio.charset.Charset;
 import serveur.FtpRequest;
 import serveur.GestionnaireFichier;
 
+/**
+ * display the file list 
+ * @author julien
+ *
+ */
 public class CommandeList extends Commande {
 	
 	private GestionnaireFichier gestionnaire;
@@ -21,7 +26,8 @@ public class CommandeList extends Commande {
 	}
 
 	/**
-	 * affiche la liste des dossiers et fichier dans le répertoir courant
+	 * display the file list in the curent directory
+	 * 
 	 */
 	public void lance() {
 		

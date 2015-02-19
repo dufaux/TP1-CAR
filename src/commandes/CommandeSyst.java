@@ -3,7 +3,7 @@ package commandes;
 import serveur.FtpRequest;
 
 /**
- * 
+ * display the name system
  * @author mallet
  *
  */
