@@ -1,7 +1,7 @@
 package commandes;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 /**
  * pull a file from the local directory to the remote directory
  * @author julien
@@ -9,7 +9,7 @@ import serveur.GestionnaireFichier;
  */
 public class CommandeRetr extends Commande {
 	
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * constructor CommandeRetr
@@ -17,9 +17,9 @@ public class CommandeRetr extends Commande {
 	 * @param gest : the gestionnaire
 	 * @param ligne : the line received
 	 */
-	public CommandeRetr(FtpRequest requete, GestionnaireFichier gest, String ligne){
+	public CommandeRetr(FtpRequest requete, FileAdministrator gest, String ligne){
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
@@ -28,9 +28,9 @@ public class CommandeRetr extends Commande {
 	 */
 	public void lance() {
 		
-		String fileName = "."+this.gestionnaire.getDirectory()+"/"+laLigne.substring(5);
+		String fileName = "."+this.fileAdmin.getDirectory()+"/"+laLigne.substring(5);
 		
-        byte[] myByteArray = this.gestionnaire.LireFichierLocal(fileName);
+        byte[] myByteArray = this.fileAdmin.LireFichierLocal(fileName);
 		
 		
 		this.laRequete.ecrireLog("Fichier demandé : "+fileName);

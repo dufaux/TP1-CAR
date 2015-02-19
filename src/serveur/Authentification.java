@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+
+import exceptions.FichierUserException;
  /**
   * authantificate a user for check if the user exist
   * @author julien
@@ -31,10 +33,13 @@ public class Authentification {
 			String name, pass;
 			while((line = buff.readLine()) != null){
 				String[] elems = line.split(",");
-				if(elems.length == 2){
+				try{
 					name = elems[0];
 					pass = elems[1];
 					this.idConnexion.put(name, pass);
+				}
+				catch(Exception e){
+					throw new FichierUserException(line+" Incorrect dans le fichier "+file);
 				}
 			}
 				

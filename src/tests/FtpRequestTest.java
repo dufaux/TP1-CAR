@@ -12,26 +12,29 @@ import org.junit.Before;
 import org.junit.Test;
 
 import serveur.Authentification;
+import serveur.ConnectionSocketAdministrator;
+import serveur.DataSocketAdministrator;
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
+import serveur.ObjectCreator;
 
 public class FtpRequestTest {
 
 	private FtpRequest ftpreq;
-	private Socket sock;
-	private GestionnaireFichier gest;
+	private ConnectionSocketAdministrator connectSockAdmin;
+	private FileAdministrator gest;
 	private Authentification auth;
-	private BufferedWriter bw;
-	private BufferedReader br;
+	private DataSocketAdministrator datasock;
+	private ObjectCreator objcr;
 	
 	@Before
 	public void setUp(){
-		this.sock = mock(Socket.class);
-		this.gest = mock(GestionnaireFichier.class);
+		this.connectSockAdmin = mock(ConnectionSocketAdministrator.class);
+		this.gest = mock(FileAdministrator.class);
 		this.auth = mock(Authentification.class);
-		this.bw = mock(BufferedWriter.class);
-		this.br = mock(BufferedReader.class);
-		ftpreq = new FtpRequest(this.sock, this.gest, this.auth, this.bw, this.br);
+		this.datasock = mock(DataSocketAdministrator.class);
+		this.objcr = mock(ObjectCreator.class);
+		ftpreq = new FtpRequest(this.connectSockAdmin, this.gest, this.auth, this.datasock, this.objcr);
 	}
 
 	
@@ -39,29 +42,16 @@ public class FtpRequestTest {
 	public void testFermeConnexion() throws IOException{
 		
 		ftpreq.fermeConnexion();
-
-		
-		verify(this.bw).close();
-		verify(this.sock).close();
+		verify(this.connectSockAdmin).close();
 	}
 	
-	
-	@Test
-	public void testLireLigne() throws IOException{
-		
-		ftpreq.lireLigne();
-		
-		verify(this.br).readLine();
-	}
 	
 	@Test
 	public void testEcrireMessage() throws IOException {
 		String code = "333";
 		String message = "le message";
 		ftpreq.ecrireMessage(code, message);
-		
-		verify(this.bw).write(code+" "+message+"\r\n");
-		verify(this.bw).flush();
+		verify(this.connectSockAdmin).write(code+" "+message+"\r\n");
 		
 	}
 

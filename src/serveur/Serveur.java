@@ -8,6 +8,10 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * main class
+ *
+ */
 public class Serveur {
 	
 	public static void main(String[] args) {
@@ -27,14 +31,12 @@ public class Serveur {
 		try {
 			while(true){ //peut peut-être être amélioré
 				client = srv.accept();
-				GestionnaireFichier gest = new GestionnaireFichier("/dossier", Runtime.getRuntime());
-				System.out.println("Un client est connecté");
-				
-				BufferedWriter buffwrit = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-				BufferedReader buffread = new BufferedReader(new InputStreamReader(client.getInputStream()));
+				FileAdministrator gest = new FileAdministrator("/dossier", Runtime.getRuntime());
 				Authentification auth = new Authentification("./users.txt");
+				ObjectCreator objcr = new ObjectCreator();
+				DataSocketAdministrator datasockadmin = new DataSocketAdministrator(objcr);
 				
-				Thread th = new Thread(new FtpRequest(client, gest, auth, buffwrit, buffread));
+				Thread th = new Thread(new FtpRequest(new ConnectionSocketAdministrator(client, objcr), gest, auth, datasockadmin, objcr));
 				th.start();
 			}
 			

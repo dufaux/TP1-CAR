@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 /**
  * deposite a file from the local directory to the remote directory
  * @author julien
@@ -13,7 +13,7 @@ import serveur.GestionnaireFichier;
  */
 public class CommandeStor extends Commande {
 	
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * constructor cmmandeStor
@@ -21,9 +21,9 @@ public class CommandeStor extends Commande {
 	 * @param gest : the gestionnaire
 	 * @param ligne : the line received
 	 */
-	public CommandeStor(FtpRequest requete, GestionnaireFichier gest, String ligne){
+	public CommandeStor(FtpRequest requete, FileAdministrator gest, String ligne){
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
@@ -32,7 +32,7 @@ public class CommandeStor extends Commande {
 	 */
 	public void lance() {
 		
-		String fileName = "."+this.gestionnaire.getDirectory()+"/"+laLigne.substring(5);
+		String fileName = "."+this.fileAdmin.getDirectory()+"/"+laLigne.substring(5);
 		
 		
 		//this.gestionnaire.enregistrerFichierLocal(fileName);

@@ -1,7 +1,7 @@
 package commandes;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 
 /**
  * display the path of current Directory
@@ -10,7 +10,7 @@ import serveur.GestionnaireFichier;
  */
 public class CommandePwd extends Commande {
 
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * Constructor CommandePwd
@@ -18,9 +18,9 @@ public class CommandePwd extends Commande {
 	 * @param gest : the gestionnaireFichier
 	 * @param ligne : the line received
 	 */
-	public CommandePwd(FtpRequest requete, GestionnaireFichier gest, String ligne) {
+	public CommandePwd(FtpRequest requete, FileAdministrator gest, String ligne) {
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
@@ -28,8 +28,8 @@ public class CommandePwd extends Commande {
 	 */
 	public void lance() {
 		
-		this.laRequete.ecrireMessage("257","\""+this.gestionnaire.getDirectory()+"\"");
-		this.laRequete.ecrireLog("PWD "+this.gestionnaire.getDirectory());
+		this.laRequete.ecrireMessage("257","\""+this.fileAdmin.getDirectory()+"\"");
+		this.laRequete.ecrireLog("PWD "+this.fileAdmin.getDirectory());
 	}
 
 }

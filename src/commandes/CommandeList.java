@@ -3,7 +3,7 @@ package commandes;
 import java.nio.charset.Charset;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 
 /**
  * display the file list 
@@ -12,7 +12,7 @@ import serveur.GestionnaireFichier;
  */
 public class CommandeList extends Commande {
 	
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * constructor CommandeList
@@ -20,9 +20,9 @@ public class CommandeList extends Commande {
 	 * @param gest : the gestionnaire
 	 * @param ligne : the line received
 	 */
-	public CommandeList(FtpRequest requete, GestionnaireFichier gest, String ligne){
+	public CommandeList(FtpRequest requete, FileAdministrator gest, String ligne){
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
@@ -32,10 +32,10 @@ public class CommandeList extends Commande {
 	public void lance() {
 		
 		    
-		    String liste = this.gestionnaire.lireListeDirectory();
+		    String liste = this.fileAdmin.lireListeDirectory();
 		    
 			this.laRequete.ecrireLog("Liste demandé : ");
-			this.laRequete.ecrireMessage("150", "Liste en cours "+this.gestionnaire.getDirectory());
+			this.laRequete.ecrireMessage("150", "Liste en cours "+this.fileAdmin.getDirectory());
 			this.laRequete.ecrireData(liste.getBytes(Charset.forName("UTF-8")));
 			this.laRequete.ecrireMessage("226", "Liste envoyée");
 			this.laRequete.fermeDataSocket();

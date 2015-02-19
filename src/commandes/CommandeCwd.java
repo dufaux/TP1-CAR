@@ -1,7 +1,7 @@
 package commandes;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 
 /**
  * allow to user changed directory 
@@ -10,7 +10,7 @@ import serveur.GestionnaireFichier;
  */
 public class CommandeCwd extends Commande {
 
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * Constructor CommandeCwd
@@ -18,9 +18,9 @@ public class CommandeCwd extends Commande {
 	 * @param gest : the gestionnaire
 	 * @param ligne : the line received
 	 */
-	public CommandeCwd(FtpRequest requete, GestionnaireFichier gest, String ligne) {
+	public CommandeCwd(FtpRequest requete, FileAdministrator gest, String ligne) {
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
@@ -33,12 +33,12 @@ public class CommandeCwd extends Commande {
 			newdir = dossier;
 		}
 		else{
-			newdir = this.gestionnaire.getDirectory()+"/"+dossier;
+			newdir = this.fileAdmin.getDirectory()+"/"+dossier;
 		}
 
-		this.gestionnaire.setDirectory(newdir);
+		this.fileAdmin.setDirectory(newdir);
 		this.laRequete.ecrireMessage("250","repertoire correctement changé");
-		this.laRequete.ecrireLog("CWD "+this.gestionnaire.getDirectory());	
+		this.laRequete.ecrireLog("CWD "+this.fileAdmin.getDirectory());	
 	}
 
 }

@@ -8,15 +8,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * 
- *
+ * class used to administrate file and directory
+ * provide list of the current directory of read file.
  */
-public class GestionnaireFichier {
+public class FileAdministrator {
 	
 	private String directory;
 	private Runtime runner;
 	
-	public GestionnaireFichier(String dir, Runtime run){
+	public FileAdministrator(String dir, Runtime run){
 		this.directory = dir;
 		this.runner = run;
 	}
@@ -49,7 +49,6 @@ public class GestionnaireFichier {
 		    p.waitFor();
 			 
 		    BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		 
 		    liste = "";
 		    String line = "";
 		    while ((line = reader.readLine())!= null) {

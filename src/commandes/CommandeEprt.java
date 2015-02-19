@@ -22,6 +22,7 @@ public class CommandeEprt extends Commande{
 		String[] params = this.laLigne.substring(5).split("\\|");
 		if(params.length != 4){
 			this.laRequete.ecrireLog("Erreur de format EPRT");
+			this.laRequete.ecrireMessage("501", "Erreur format EPRT");
 		}else{
 			String add = params[2];
 			String port = params[3];

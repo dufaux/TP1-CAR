@@ -3,7 +3,7 @@ package commandes;
 import java.io.File;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 /**
  * delete the selected file
  * @author julien
@@ -11,7 +11,7 @@ import serveur.GestionnaireFichier;
  */
 public class CommandeDele extends Commande {
 
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * constructor CommandeDele
@@ -19,9 +19,9 @@ public class CommandeDele extends Commande {
 	 * @param gest : the gestionnaire
 	 * @param ligne : the line received
 	 */
-	public CommandeDele(FtpRequest requete, GestionnaireFichier gest, String ligne) {
+	public CommandeDele(FtpRequest requete, FileAdministrator gest, String ligne) {
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class CommandeDele extends Commande {
 	 */
 	public void lance() {
 		
-		String fileName = "."+this.gestionnaire.getDirectory()+"/"+laLigne.substring(5);
+		String fileName = "."+this.fileAdmin.getDirectory()+"/"+laLigne.substring(5);
 		File myFile = new File (fileName);
 		
 		if(myFile.delete()){

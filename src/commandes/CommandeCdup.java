@@ -1,15 +1,15 @@
 package commandes;
 
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
+
 /**
  * 
- * @author julien
  *
  */
 public class CommandeCdup extends Commande{
 
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator fileAdmin;
 	
 	/**
 	 * constructor CommandeCdup
@@ -17,23 +17,23 @@ public class CommandeCdup extends Commande{
 	 * @param gest : gestionnaireFichier
 	 * @param ligne : the line received
 	 */
-	public CommandeCdup(FtpRequest requete, GestionnaireFichier gest, String ligne) {
+	public CommandeCdup(FtpRequest requete, FileAdministrator gest, String ligne) {
 		super(requete, ligne);
-		this.gestionnaire = gest;
+		this.fileAdmin = gest;
 	}
 
 	/**
 	 * allow to verify if the directory is changed
 	 */
 	public void lance(){
-		String curdir = this.gestionnaire.getDirectory();
+		String curdir = this.fileAdmin.getDirectory();
 		
 		if(curdir.contains("/")){
 			String newdir = curdir.substring(0,curdir.lastIndexOf("/"));
 
-			this.gestionnaire.setDirectory(newdir);
-			this.laRequete.ecrireMessage("250","repertoire correctement changé == "+this.gestionnaire.getDirectory());
-			this.laRequete.ecrireLog("CDUP "+this.gestionnaire.getDirectory());	
+			this.fileAdmin.setDirectory(newdir);
+			this.laRequete.ecrireMessage("250","repertoire correctement changé == "+this.fileAdmin.getDirectory());
+			this.laRequete.ecrireLog("CDUP "+this.fileAdmin.getDirectory());	
 		}
 		else{
 			

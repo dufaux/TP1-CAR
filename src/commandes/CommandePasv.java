@@ -1,5 +1,7 @@
 package commandes;
 
+import java.net.ServerSocket;
+
 import serveur.FtpRequest;
 
 public class CommandePasv extends Commande{
@@ -13,9 +15,12 @@ public class CommandePasv extends Commande{
 		super(requete, ligne);
 	}
 
-	@Override
+	/**
+	 * lance le mode passif pour ipv4
+	 */
 	public void lance() {
 		
+		this.laRequete.passiveMode(false);
 	}
 
 }

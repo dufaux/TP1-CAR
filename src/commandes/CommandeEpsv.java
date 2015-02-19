@@ -13,9 +13,12 @@ public class CommandeEpsv extends Commande{
 		super(requete, ligne);
 	}
 
-	@Override
+	/**
+	 * lance le mode passif dédié au epsv
+	 */
 	public void lance() {
 		
+		this.laRequete.passiveMode(true);
 	}
 
 }

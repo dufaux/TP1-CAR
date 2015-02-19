@@ -12,16 +12,16 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 
-public class GestionnaireFichierTest {
+public class FileAdministratorTest {
 	
-	private GestionnaireFichier gestionnaire;
+	private FileAdministrator gestionnaire;
 	private Runtime runner;
 	@Before
 	public void setUp(){
 		runner = mock(Runtime.class); 
-		gestionnaire = new GestionnaireFichier("/dossier",runner);
+		gestionnaire = new FileAdministrator("/dossier",runner);
 	}
 	
 	@Test

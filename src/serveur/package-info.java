@@ -2,7 +2,6 @@
  * 
  */
 /**
- * @author dufaux
- *
+ * 
  */
 package serveur;

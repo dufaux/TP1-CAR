@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import serveur.Authentification;
 import serveur.FtpRequest;
-import serveur.GestionnaireFichier;
+import serveur.FileAdministrator;
 import serveur.User;
 import commandes.Commande;
 import commandes.CommandeCdup;
@@ -32,13 +32,13 @@ import commandes.CommandeUser;
 public class CommandeTest {
 	
 	private FtpRequest ftpreq;
-	private GestionnaireFichier gest;
+	private FileAdministrator gest;
 	private Authentification auth;
 	
 	@Before
 	public void setUp(){
 		ftpreq = mock(FtpRequest.class);
-		gest = mock(GestionnaireFichier.class);
+		gest = mock(FileAdministrator.class);
 		auth = mock(Authentification.class);
 	}
 	
