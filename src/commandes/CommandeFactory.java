@@ -24,6 +24,8 @@ public class CommandeFactory {
 			return new CommandeEprt(requete, ligne);
 		}else if(commande.compareTo("PASS") == 0){
 			return new CommandePass(requete, auth, ligne);
+		}else if(commande.compareTo("PORT") == 0){
+			return new CommandePort(requete, ligne);
 		}else if(commande.compareTo("RETR") == 0){
 			return new CommandeRetr(requete, gest, ligne);
 		}else if(commande.compareTo("STOR") == 0){
