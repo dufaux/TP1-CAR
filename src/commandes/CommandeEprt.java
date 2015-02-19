@@ -5,7 +5,7 @@ import java.io.IOException;
 import serveur.FtpRequest;
 
 public class CommandeEprt extends Commande{
-
+	
 	public CommandeEprt(FtpRequest requete, String ligne) {
 		super(requete, ligne);
 	}

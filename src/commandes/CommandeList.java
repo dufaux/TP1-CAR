@@ -9,12 +9,20 @@ public class CommandeList extends Commande {
 	
 	private GestionnaireFichier gestionnaire;
 	
+	/**
+	 * constructor CommandeList
+	 * @param requete : the requete received
+	 * @param gest : the gestionnaire
+	 * @param ligne : the line received
+	 */
 	public CommandeList(FtpRequest requete, GestionnaireFichier gest, String ligne){
 		super(requete, ligne);
 		this.gestionnaire = gest;
 	}
 
-	@Override
+	/**
+	 * affiche la liste des dossiers et fichier dans le répertoir courant
+	 */
 	public void lance() {
 		
 		    

@@ -8,11 +8,21 @@ public class CommandeUser extends Commande {
 	
 	private Authentification authentificator;
 	
+	/**
+	 * constructor CommandeUser
+	 * @param requete : the requete received
+	 * @param auth : the authentification
+	 * @param ligne : the line received
+	 */
 	public CommandeUser(FtpRequest requete, Authentification auth, String ligne) {
 		super(requete, ligne);
 		this.authentificator = auth;
 	}
 
+	/**
+	 * execute the command which allow to authentificate the user
+	 * search the user in database and accept it if the username exist
+	 */
 	public void lance() {
 		String username = laLigne.substring(5);
 			

@@ -8,12 +8,20 @@ public class CommandePass extends Commande {
 	
 	private Authentification authentificator;
 	
+	/**
+	 * constructor commandePass
+	 * @param requete : the requete received
+	 * @param auth : the authentification
+	 * @param ligne : the line received
+	 */
 	public CommandePass(FtpRequest requete, Authentification auth, String ligne){
 		super(requete, ligne);
 		this.authentificator = auth;
 	}
 
-	@Override
+	/**
+	 * Check if the password is correct
+	 */
 	public void lance() {
 		String password = this.laLigne.substring(5);
 		

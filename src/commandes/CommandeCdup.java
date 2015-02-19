@@ -7,12 +7,20 @@ public class CommandeCdup extends Commande{
 
 	private GestionnaireFichier gestionnaire;
 	
+	/**
+	 * constructor CommandeCdup
+	 * @param requete :  the requete received
+	 * @param gest : gestionnaireFichier
+	 * @param ligne : the line received
+	 */
 	public CommandeCdup(FtpRequest requete, GestionnaireFichier gest, String ligne) {
 		super(requete, ligne);
 		this.gestionnaire = gest;
 	}
 
-	@Override
+	/**
+	 * 
+	 */
 	public void lance(){
 		String curdir = this.gestionnaire.getDirectory();
 		
