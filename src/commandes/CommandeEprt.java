@@ -25,10 +25,10 @@ public class CommandeEprt extends Commande{
 					this.laRequete.ecrireLog("Socket data effectue sur le port "+port);
 
 				} catch (NumberFormatException e) {
-					this.laRequete.ecrireMessage("200", "Erreur format port");
+					this.laRequete.ecrireMessage("501", "Erreur format port");
 					throw new RuntimeException(e);
 				} catch (IOException e) {
-					this.laRequete.ecrireMessage("200", "Erreur adresse IP");
+					this.laRequete.ecrireMessage("501", "Erreur adresse IP");
 					throw new RuntimeException(e);
 				}
 		}
