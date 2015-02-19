@@ -6,8 +6,8 @@ import serveur.FtpRequest;
 import serveur.FileAdministrator;
 
 /**
- * display the file list 
- * @author julien
+ * class used to execute "ln -s"
+ * @author dufaux
  *
  */
 public class CommandeList extends Commande {

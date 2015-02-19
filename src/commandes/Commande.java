@@ -2,7 +2,7 @@ package commandes;
 
 import serveur.FtpRequest;
 /**
- * allow to execut the command
+ * abstract class commande 
  * @author julien
  *
  */
