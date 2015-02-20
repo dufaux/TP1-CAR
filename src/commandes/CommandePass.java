@@ -2,7 +2,6 @@ package commandes;
 
 import serveur.Authentification;
 import serveur.FtpRequest;
-import serveur.User;
 
 /**
  * this command, identify the user and check

@@ -8,15 +8,26 @@ Johan Dufaux & Julien Mallet
  Introduction
 =====================
 
-Ce "logiciel" permet de faire tourner un serveur en java. 
+Ce "logiciel" permet de faire tourner un serveur FTP en java.
+Le serveur gère le mode actif ou passif en ipv4 ou 6. 
+Il permet de stor ou retr facilement des fichiers et s'authentifier selon une liste d'utilisateur.
+L'utilisateur anonymous a par défaut tous les droits.
 
+## Parametres:
+  java -jar tp1-dufaux-mallet.jar NUM_PORT
+avec NUM_PORT comme numéro de port
 
+Le serveur a besoin d'un fichier users.txt pour fonctionner. 
+Si pas de fichier:
+  java -jar tp1-dufaux-mallet.jar NUM_PORT -i PSEUDO PASSWORD
+avec comme seul identifiants autorisé: anonymous, et PSEUDO/PASSWORD.
 
  Architecture
 =====================
 
 package Commande:
-La liste des commandes executable par notre serveur.
+Commande est une classe abstraite
+Chaque commande hérite de Commande et execute une fonction dédié.
 
 package serveur:
 Les classes "utiles" pour la gestion du serveur.
@@ -25,7 +36,6 @@ tests:
 Les classes réalisant les tests unitaires.
 
 
-Gestion des exceptions:
 
 
 
@@ -33,29 +43,106 @@ Gestion des exceptions:
  Code Samples
 =====================
 
+--------------------------------------------------------------------------------------
+String add = params[0] + "." + params[1] + "." + params[2] + "." + params[3];
+int resultPort = (Integer.parseInt(params[4]) * 256) + Integer.parseInt(params[5]) ;
+String port = Integer.toString(resultPort);
+
+this.laRequete.ouvreDataSocket(Integer.parseInt(port), add);
+this.laRequete.ecrireMessage("200", "Socket data effectue sur le port "+port);
+this.laRequete.ecrireLog("Socket data effectue sur le port "+port);
+
+
+
+--------------------------------------------------------------------------------------
+while(!connectSockAdmin.isClosed()){
+	
+	String ligneCommande = this.connectSockAdmin.readLine();
+	
+	if(ligneCommande != null){
+		Commande laCommande = CommandeFactory.CreeUneCommande(this, this.fileAdmin, this.authentificator, ligneCommande);
+		laCommande.lance();
+	}
+}
+
+
+
+--------------------------------------------------------------------------------------
+public class ObjectCreator {
+
+	public Socket createSocket(int port, String add) throws UnknownHostException, IOException{
+		return new Socket(add, port);
+	}
+	
+	public BufferedWriter createBufferedWriter(Socket sock) throws IOException{
+		return new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+	}
+	
+	public BufferedReader createBufferedReader(Socket sock) throws IOException{
+		return new BufferedReader(new InputStreamReader(sock.getInputStream()));
+	}
+
+	public ServerSocket createServerSocket(int port) throws IOException{
+		return new ServerSocket(port);
+	}
+	
+}
+
+
+
+--------------------------------------------------------------------------------------
+@Test
+public void testLireListeDirectory() throws IOException{
+	String cmdunix = "ls -n ./dossier";
+	String liste = "test.txt 5604 18/02/2013 drwxr \r\n autre.txt 154 24/03/2013 drrwxr \r\n";
+	String retour;
+	Process p = mock(Process.class);
+	InputStream ipsmock = new ByteArrayInputStream(liste.getBytes() );
+	
+
+	when(this.runner.exec(cmdunix)).thenReturn(p);
+	when(p.getInputStream()).thenReturn(ipsmock);
+	
+	
+	retour = gestionnaire.lireListeDirectory();
+	
+
+	verify(this.runner).exec(cmdunix);
+	assertEquals(liste, retour);
+	
+}
+
+
+
+--------------------------------------------------------------------------------------
+BufferedReader buff = new BufferedReader(new FileReader(file));
+
+String line;
+String name, pass;
+while((line = buff.readLine()) != null){
+	String[] elems = line.split(",");
+	try{
+		name = elems[0];
+		pass = elems[1];
+		this.idConnexion.put(name, pass);
+	}
+	catch(Exception e){
+		throw new FichierUserException(line+" Incorrect dans le fichier "+file);
+	}
+}
 
 
 
 
 
+
+
+
+
+
+
+PERSO:
 http://fr.wikipedia.org/wiki/Liste_des_codes_des_r%C3%A9ponses_d%27un_serveur_FTP
 http://en.wikipedia.org/wiki/List_of_FTP_server_return_codes
 http://www.serv-u.com/respcode.asp?cmd=PASS&prod=su
 http://www.faqs.org/rfcs/rfc959.html
-
-
-OK USER, PASS, SYST.
-AJOUT DE CDUP, CWD, EPRT.
-
-manque retr, stor, (quit), pasv (difference eprt?).
-
-manque donc les transfert de fichiers.
-peut-être un systeme de login (fichier csv ac nom/mdp?)
-
-
-PERSO:
-http://www.fil.univ-lille1.fr/~monperrus/index.php?page=consigne-tp
-virer les printstacktrace()
-gerer les try
-TEST UNITAIRE ?
-

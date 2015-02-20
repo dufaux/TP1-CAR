@@ -1,6 +1,5 @@
 package commandes;
 
-import java.net.ServerSocket;
 
 import serveur.FtpRequest;
 

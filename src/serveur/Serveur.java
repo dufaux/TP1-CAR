@@ -17,10 +17,11 @@ public class Serveur {
 	
 	public static void main(String[] args) {
 		ServerSocket srv = null;
-		Socket client = null;		
+		Socket client = null;
+		int port = Integer.parseInt(args[0]);
 		try {
-			srv = new ServerSocket(2121);
-			System.out.println("Serveur lancé sur le port 2121");
+			srv = new ServerSocket(port);
+			System.out.println("Serveur lancé sur le port "+port);
 			
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -30,7 +31,13 @@ public class Serveur {
 			while(true){ //peut peut-être être amélioré
 				client = srv.accept();
 				FileAdministrator gest = new FileAdministrator("/dossier", Runtime.getRuntime());
-				Authentification auth = new Authentification("./users.txt");
+				Authentification auth;
+				if(args.length == 4 && args[1].compareTo("-i") == 0){
+					auth = new Authentification(args[2],args[3]);
+				}
+				else{
+					auth = new Authentification("./users.txt");
+				}
 				ObjectCreator objcr = new ObjectCreator();
 				DataSocketAdministrator datasockadmin = new DataSocketAdministrator(objcr);
 				

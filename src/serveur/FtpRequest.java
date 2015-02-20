@@ -61,7 +61,6 @@ public class FtpRequest implements Runnable{
 			String ligneCommande = this.connectSockAdmin.readLine();
 			
 			if(ligneCommande != null){
-				//this.EcrireLog("Commande : "+ligneCommande);
 				Commande laCommande = CommandeFactory.CreeUneCommande(this, this.fileAdmin, this.authentificator, ligneCommande);
 				laCommande.lance();
 			}
@@ -170,7 +169,6 @@ public class FtpRequest implements Runnable{
 	public void passiveMode(boolean epsv) {			
 		int i;
 		ServerSocket srv;
-		String separateur;
 		try {
 			srv = this.creator.createServerSocket(0);
 			

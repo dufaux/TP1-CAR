@@ -50,6 +50,16 @@ public class Authentification {
 	}
 	
 	/**
+	 * constructor used to test the server with only one identifier (to use without file).
+	 * @param nom
+	 * @param password
+	 */
+	public Authentification(String nom, String password){
+		this.idConnexion = new HashMap<String, String>();
+		this.idConnexion.put(nom,password);
+	}
+	
+	/**
 	 * check if the user exist
 	 * @param user : the user name
 	 */
